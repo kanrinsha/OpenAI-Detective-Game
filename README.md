@@ -41,3 +41,11 @@ Please ensure that you follow the security practices and guidelines provided by 
 1. Enter questions into the text input field in the Main scene.
 2. Await a response from the AI.
 3. Play along and try to provide evidence and get the AI to admit that it committed the crime.
+
+## OpenAI Wrapper
+
+For integration with the OpenAI API, this project utilizes the [OpenAI Unity wrapper](https://github.com/srcnalt/OpenAI-Unity/tree/master) 
+
+Thanks to the author for their contribution to this project.
+
+Please refer to the [OpenAI Unity wrapper repository](https://github.com/srcnalt/OpenAI-Unity/tree/master) for detailed documentation and usage instructions.
