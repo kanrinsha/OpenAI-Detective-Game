@@ -49,3 +49,11 @@ For integration with the OpenAI API, this project utilizes the [OpenAI Unity wra
 Thanks to the author for their contribution to this project.
 
 Please refer to the [OpenAI Unity wrapper repository](https://github.com/srcnalt/OpenAI-Unity/tree/master) for detailed documentation and usage instructions.
+
+## About This Game
+
+This game was developed in just one day as part of a sudden idea. While the visuals and graphics may not be polished or visually stunning, the emphasis of this project lies in the gameplay and narrative experience.
+
+The visual quality may not meet professional standards, but the focus was placed on creating engaging and immersive text-based interactions. The strength of the game lies in the compelling dialogue and intricate crime-solving puzzles. If you are also to create your own prompt in ChatGPT.cs, you can easily create many different games also.
+
+Please note that this project is a prototype and may not receive further updates or improvements beyond its initial development stage.
