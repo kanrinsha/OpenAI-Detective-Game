@@ -57,3 +57,5 @@ This game was developed in just one day as part of a sudden idea. While the visu
 The visual quality may not meet professional standards, but the focus was placed on creating engaging and immersive text-based interactions. The strength of the game lies in the compelling dialogue and intricate crime-solving puzzles. If you are also to create your own prompt in ChatGPT.cs, you can easily create many different games also.
 
 Please note that this project is a prototype and may not receive further updates or improvements beyond its initial development stage.
+
+Sometimes the prompt doesn't work as expected, if the conversation resolves itself-- or the conversation is between both the detective and the suspect in the response, try restarting and asking a different first question.
