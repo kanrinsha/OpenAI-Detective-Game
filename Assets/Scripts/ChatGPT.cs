@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 using System.Collections;
+using UnityEditor.VersionControl;
 
 namespace OpenAI
 {
@@ -24,42 +25,14 @@ namespace OpenAI
 
         private List<ChatMessage> messages = new List<ChatMessage>();
 
-        private readonly string userPrompt = "Give me a run down on the case.";
+        private readonly string aiPrompt = "Act as the suspect in a fictional crime case and reply to the questions, while occasionally lying and giving hints that you are the one who comitted the crime, without actually saying so. Don't break character. Don't ever mention that you are an AI model. DO NOT speak for the detective. Only answer questions asked. Slowly get more afraid after each question and eventually confess if the detective gets enough information to prove you did it.";
 
-        private readonly string firstAIPrompt = "I need you to provide me with a fictional crime case scenario. Create a detailed account of a crime, including the type of crime, location, potential suspects," +
-                    " and any other pertinent information. Be creative and make it challenging for me to solve. Begin by describing the crime and its circumstances. Do NOT say who did the crime or how to solve it directly.";
-
-        private readonly string aiPrompt = "Act as the potential suspect involved in the crime case. Your role is to respond to the detective's questions truthfully," +
-            " to the best of your knowledge. However, in this scenario, you have been instructed to occasionally provide false information or attempt to deceive the detective." +
-            " While you should strive to maintain a convincing facade, ensure that you include subtle details within your responses that, if carefully analyzed," +
-            " could allow the detective to uncover your lies. Engage in the interrogation, be cautious," +
-            " and try to mislead the detective while leaving behind clues that may expose your deception. Don't break character. Don't ever mention that you are an AI model.";
-
-        private IEnumerator Start()
+        private void Start()
         {
             button.onClick.AddListener(SendReply);
-
-            var item = Instantiate(sent, scroll.content);
-            var text = item.GetChild(0).GetChild(0).GetComponent<TMP_Text>();
-            text.text = userPrompt;
-            AppendMessage(item);
-
-            messages.Add(new ChatMessage { Role = "user", Content = firstAIPrompt });
-
-            AskOpenAI();
-
-            yield return new WaitUntil(() => isChatting == false && typingCoroutine == null);
-
-            messages.Add(new ChatMessage
-            {
-                Role = "user",
-                Content = aiPrompt
-            });
-
-            AskOpenAI();
         }
 
-        private async void AskOpenAI()
+        private async void AskOpenAI(bool append)
         {
             isChatting = true;
             button.enabled = false;
@@ -68,16 +41,17 @@ namespace OpenAI
 
             var item = Instantiate(received, scroll.content);
             var text = item.GetChild(0).GetChild(0).GetComponent<TMP_Text>();
+
             AppendMessage(item);
 
             typingCoroutine ??= StartCoroutine(DoTypingAnimation(text));
 
             var completionResponse = await openai.CreateChatCompletion(new CreateChatCompletionRequest()
             {
-                Model = "gpt-3.5-turbo-0301",
+                Model = "gpt-3.5-turbo",
                 Messages = messages
             });
-
+            
             if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
             {
                 var message = completionResponse.Choices[0].Message;
@@ -96,6 +70,13 @@ namespace OpenAI
             {
                 isChatting = false;
                 Debug.LogWarning("No text was generated from this prompt.");
+                isChatting = false;
+
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+
+                text.text = "Message failed to generate, please retry.";
+                AppendMessage(item);
             }
 
             button.enabled = true;
@@ -129,7 +110,7 @@ namespace OpenAI
 
         public void SendReply()
         {
-            if (isChatting)
+            if (isChatting || inputField.text == string.Empty)
                 return;
 
             var item = Instantiate(sent, scroll.content);
@@ -137,9 +118,9 @@ namespace OpenAI
             text.text = inputField.text;
             AppendMessage(item);
 
-            messages.Add(new ChatMessage { Role = "user", Content = inputField.text });
+            messages.Add(new ChatMessage { Role = "user", Content = aiPrompt + "\n" + inputField.text});
 
-            AskOpenAI();
+            AskOpenAI(true);
         }
     }
 }
